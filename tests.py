@@ -1,11 +1,14 @@
-from matrix_column_filter import column_search
+from matrix_column_filter import column_search, random_column_search
 
 def main():
-    time_tests()
-
-def time_tests():
-    # NOTE column_search(19,12,8) executed in 325_964_517_900ns ~5m:26s on Devin's laptop
-    shatter = column_search(6,3,3)
+    n = 10
+    k = 6
+    vc = 5
+    s = 2**(k-1)
+    l = 2
+    u = 0
+    shatter = column_search(n,k,vc,s,l,u)
+    print(shatter)
 
 if __name__ == "__main__":
     main()
