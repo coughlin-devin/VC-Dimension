@@ -3,6 +3,7 @@ import time
 from random import sample
 from communication_matrix import S
 from itertools import combinations
+from tqdm import tqdm
 
 #%% Decorator for timing function execution time
 def timer(func):
@@ -23,8 +24,8 @@ def print_shatter(iterable,n):
     return shatter
 
 # find values with column sum in communication matrix in specified range
-def filter_cmatrix(matrix, val, lower, upper):
-    return [i for i,sum in enumerate(np.sum(matrix, axis=0)) if sum<=(val+upper) and sum>=(val-lower)]
+def filter_cmatrix(matrix, lower, upper):
+    return [i for i,sum in enumerate(np.sum(matrix, axis=0)) if sum <= upper and sum >= lower]
 
 #IDEA look for combinations with close to 50/50 1 to 0 populated bits
 # arguments: n = binary sequence length
@@ -36,7 +37,7 @@ def filter_cmatrix(matrix, val, lower, upper):
 # behavior: search all combinations of size vc from subset of binary sequences length n with communication matrix column sums in range s-l <= sum <= s+u
 # returns: shattered set if found, null otherwise
 @timer
-def column_search(n,k,vc,s,l,u):
+def column_search(n,k,vc,l,u):
     # communication matrix
     cm = S(n,k) # OPTIMIZE make creating communication matrix faster
     # array of communication matrix column sums
@@ -47,7 +48,9 @@ def column_search(n,k,vc,s,l,u):
     comm_set = set()
     # IDEA use combinations whose column sums are in a specific range of values: [comb for comb in combinations(filter_cmatrix(cm, s, l, u), 2) if sum([col_sums[num] for num in comb]) < 3] # < 3 is arbitrary condition
     # NOTE for each combinations of size s with column sums in range 2**(k-1) - 0 <= sum <= 2**(k-1) + 0
-    for comb in combinations(filter_cmatrix(cm, s, l, u), vc):
+    possible_shattered_sets = list(combinations(set(filter_cmatrix(cm, l, u)), vc))
+    bar = tqdm(possible_shattered_sets)
+    for comb in bar:
         # clear comm_set
         comm_set.clear()
         # for each subsequence
@@ -60,7 +63,8 @@ def column_search(n,k,vc,s,l,u):
             comm_set.add(comm_tuple)
         if len(comm_set) == 2**vc:
             shatter = comb
-            print(f"Shattered set: {print_shatter(shatter,n) }, n={n}, k={k}, vc={vc}, s={s}, l={l}, u={u}")
+            bar.close()
+            print(f"Shattered set: {print_shatter(shatter,n) }, n={n}, k={k}, vc={vc}, l={l}, u={u}")
             print(f"Communication matrix column sums: {[col_sums[num] for num in comb]}")
             return shatter
 
