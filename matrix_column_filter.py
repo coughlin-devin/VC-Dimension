@@ -27,6 +27,7 @@ def filter_cmatrix(matrix, val, lower, upper):
     return [i for i,sum in enumerate(np.sum(matrix, axis=0)) if sum<=(val+upper) and sum>=(val-lower)]
 
 #IDEA look for combinations with close to 50/50 1 to 0 populated bits
+#IDEA remove duplicate values with identical columns
 # arguments: n = binary sequence length
 #            k = binary subsequence length
 #            vc = size of set attempting to shatter (vc dimension)
@@ -85,3 +86,5 @@ def random_column_search(n,k,s):
 
 # QUESTION How does raising n affect results? Will increasing n after not finding shattered set potentially create a shattered set without increasing k or s/vc?
 # QUESTION Why did they choose n<=12? does it matter what n is when finding VC dimensions for k? Do they want the lowest n possible?
+
+# 2^(S-1)<=colsum<=2^k-2^(S-1)
