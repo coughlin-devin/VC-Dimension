@@ -1,5 +1,6 @@
 import numpy as np
 import time
+import math
 from random import sample
 from communication_matrix import S
 from itertools import combinations
@@ -47,8 +48,9 @@ def column_search(n,k,vc,l,u):
     comm_set = set()
     # IDEA use combinations whose column sums are in a specific range of values: [comb for comb in combinations(filter_cmatrix(cm, l, u), 2) if sum([col_sums[num] for num in comb]) < 3] # < 3 is arbitrary condition
     # NOTE for each combinations of size s with column sums in range 2**(k-1) - 0 <= sum <= 2**(k-1) + 0
-    possible_shattered_sets = list(combinations(filter_cmatrix(cm, l, u), vc))
-    bar = tqdm(possible_shattered_sets, colour="green")
+    filtered = filter_cmatrix(cm, l, u)
+    possible_shattered_sets = combinations(filtered, vc)
+    bar = tqdm(possible_shattered_sets, total = math.comb(len(filtered), vc), colour="green")
     for comb in bar:
         # clear comm_set
         comm_set.clear()
