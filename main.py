@@ -10,10 +10,9 @@ def main():
     usum = 2**(k-1)  #2**k - 2**(vc-1)
     lpc = int(n/2) - 2
     upc = int(n/2) + 1
-    # diagonal array of nxk where arr[3][2] represents n=3,k=2
-    #arr = [[[] for k in range(n)] for n in range(20)]
 
-    # load array
+    # load diagonal array of lists of dataframes, each containing a shatterd set with column sum and population count information
+    # arr[3][2] holds a list of dataframes for n=3, k=2. 
     with open ('data', 'rb') as fp:
         arr = pickle.load(fp)
 
