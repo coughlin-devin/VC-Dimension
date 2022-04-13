@@ -1,14 +1,28 @@
-from matrix_column_filter import shatter, random_column_search
+import pickle
+import math
+from matrix_column_filter import shatter
 
 def main():
-    n = 9
-    k = 6
-    vc = 5
-    l = 30 #2**(vc-1) # NOTE: 2^(S-1)<=column sum<=2^k-2^(S-1)
-    u = 34 #2**k - 2**(vc-1)
+    n = 3
+    k = 2
+    vc = 2
+    lsum = 2**(vc-1) # NOTE: 2^(S-1)<=column sum<=2^k-2^(S-1)
+    usum = 2**k - 2**(vc-1)
+    lpc = 1 #int(n/2) - 1
+    upc = n-1 #int(n/2) + 1
+    # diagonal array of nxk where arr[3][2] represents n=3,k=2
+    #arr = [[[] for k in range(n)] for n in range(20)]
+
+    # load array
+    with open ('data', 'rb') as fp:
+        arr = pickle.load(fp)
+
     #shatter = random_column_search(n,k,vc,l,u)
-    s = shatter(n,k,vc,l,u)
-    print(s)
+    dfs = shatter(n,k,vc,l,u)
+    arr[n][k] = dfs
+    # save array to file
+    with open('data', 'wb') as fp:
+        pickle.dump(arr, fp)
 
 if __name__ == "__main__":
     main()
