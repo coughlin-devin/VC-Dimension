@@ -45,7 +45,7 @@ def filter_cmatrix(matrix,n,lsum,usum,lpc,upc):
 @timer
 def shatter(n,k,vc,lsum,usum,lpc,upc):
     # list of dataframes of shattered sets
-    dfs = []
+    #dfs = []
     # communication matrix
     cm = S(n,k)
     # TODO IDEA use combinations whose column sums are in a specific range of values: [comb for comb in combinations(filter_cmatrix(cm, l, u), 2) if sum([col_sums[num] for num in comb]) < 3] # < 3 is arbitrary condition
@@ -60,10 +60,8 @@ def shatter(n,k,vc,lsum,usum,lpc,upc):
             dict = {"Sequence" : print_shatter(comb,n), "Column Sum" : [np.sum(cm,axis=0)[num] for num in comb], "Population Count" : [popcnt_lookup32(num) for num in comb]}
             shattered_set = pd.DataFrame(dict)
             print(shattered_set.to_string())
-            dfs.append(shattered_set)
-            if len(dfs) == 5: #NOTE arbitrary choice of stopping at 5 shattered sets, will likely be in order so very similar values
-                return dfs
-    return dfs
+            #dfs.append(shattered_set)
+            return shattered_set
 
 @timer
 def random_shatter(n,k,vc,lsum,usum,lpc,upc):
